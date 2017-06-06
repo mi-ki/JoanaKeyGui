@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package joanakeygui.JoanaHandler;
+package multipleclassesfalsepos;
 
 /**
  *
  * @author holgerklein
  */
-public class Helper {
-    
+public class ClassB {
+    public void putDatumInArr(int h, int[] arr) {
+        arr[4] = h;
+    }
 }

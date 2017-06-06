@@ -7,10 +7,12 @@ package joanakeygui;
 
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -22,11 +24,30 @@ import javafx.stage.Stage;
  */
 public class FXMLDocumentController implements Initializable {
 
-    private JoanaView joanaView = new JoanaView();
+    private JoanaView joanaView = new JoanaView(this);
     private Stage stage;
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
+    @FXML
+    private ComboBox<String> mainClassesCB;
+
+    @FXML
+    public void onAddSrc() {
+        System.out.println("add");
+    }
+
+    @FXML
+    public void onRemoveSrc() {
+
+    }
+
+    @FXML
+    public void onAddSink() {
+
+    }
+
+    @FXML
+    public void onRemoveSink() {
+
     }
 
     @FXML
@@ -50,6 +71,25 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        mainClassesCB.setDisable(true);
+        mainClassesCB.setOnAction((event) -> {
+            joanaView.setCurrentMainClass(mainClassesCB.getSelectionModel().getSelectedItem());
+        });
+
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    void letUserChooseMainClass(List<String> allClassesContainingMainMethod) {
+        mainClassesCB.getItems().clear();
+        mainClassesCB.getItems().addAll(allClassesContainingMainMethod);
+        mainClassesCB.setDisable(false);
+    }
+
+    void letUserAddSinksAndSrcs() {
+
     }
 
 }

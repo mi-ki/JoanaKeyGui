@@ -6,6 +6,8 @@
 package joanakeygui;
 
 import java.io.File;
+import joanakeygui.joanahandler.Helper;
+import joanakeygui.joanahandler.JoanaInstance;
 
 /**
  *
@@ -16,20 +18,52 @@ public class JoanaView {
     private File currentJarFile;
     private File currentJavaFolderFile;
     private String currentMainClass;
+    private FXMLDocumentController controller;
+    private JoanaInstance joanaInstance;
 
-    public void setCurrentJarFile(File currentJarFile) {
-        this.currentJarFile = currentJarFile;
+    public JoanaView(FXMLDocumentController controller) {
+        this.controller = controller;
     }
 
-    public void setCurrentJavaFolderFile(File currentJavaFolderFile) {
-        this.currentJavaFolderFile = currentJavaFolderFile;
+    public void setCurrentJarFile(File jarFile) {
+        if (jarFile == null) {
+            return;
+        }
+        this.currentJarFile = jarFile;
+
+        if (currentJavaFolderFile == null) {
+            return;
+        }
+        boolean correctJarFile = checkIfCorrectJarFile();
+        //handle result
+
+    }
+
+    public void setCurrentJavaFolderFile(File folderDir) {
+        if (folderDir == null) {
+            return;
+        }
+        this.currentJavaFolderFile = folderDir;
+        controller.letUserChooseMainClass(Helper.getAllClassesContainingMainMethod(this.currentJavaFolderFile));
     }
 
     public void setCurrentMainClass(String currentMainClass) {
         this.currentMainClass = currentMainClass;
     }
 
-   
-    
-    
+    private void tryCreateJoana() {
+        if (currentMainClass == null || currentJavaFolderFile == null || currentJarFile == null) {
+            return;
+        }
+        joanaInstance = new JoanaInstance(
+                currentJarFile.getAbsolutePath(),
+                currentJavaFolderFile.getAbsolutePath(),
+                currentMainClass);
+        controller.letUserAddSinksAndSrcs();
+    }
+
+    private boolean checkIfCorrectJarFile() {
+        return true;
+    }
+
 }
