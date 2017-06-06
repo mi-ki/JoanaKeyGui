@@ -15,7 +15,7 @@
       <Button layoutX="372.0" layoutY="51.0" mnemonicParsing="false" onAction="#onChooseSrcFolder" text="choose source folder" />
       <ComboBox fx:id="mainClassesCB" layoutX="14.0" layoutY="84.0" prefHeight="26.0" prefWidth="386.0" />
       <Label layoutX="407.0" layoutY="89.0" text="choose main class" />
-      <AnchorPane layoutX="14.0" layoutY="110.0" prefHeight="338.0" prefWidth="526.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+      <AnchorPane fx:id="srcSinkAP" layoutX="14.0" layoutY="110.0" prefHeight="338.0" prefWidth="526.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
          <children>
             <ListView layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" />
             <ListView layoutX="317.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" />

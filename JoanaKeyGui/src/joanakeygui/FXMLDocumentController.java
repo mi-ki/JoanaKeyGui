@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -29,6 +30,8 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private ComboBox<String> mainClassesCB;
+    @FXML
+    private AnchorPane srcSinkAP;
 
     @FXML
     public void onAddSrc() {
@@ -71,6 +74,7 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        srcSinkAP.setDisable(true);
         mainClassesCB.setDisable(true);
         mainClassesCB.setOnAction((event) -> {
             joanaView.setCurrentMainClass(mainClassesCB.getSelectionModel().getSelectedItem());
@@ -89,7 +93,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     void letUserAddSinksAndSrcs() {
-
+        srcSinkAP.setDisable(false);
     }
 
 }

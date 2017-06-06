@@ -36,7 +36,7 @@ public class JoanaView {
         }
         boolean correctJarFile = checkIfCorrectJarFile();
         //handle result
-
+        tryCreateJoana();
     }
 
     public void setCurrentJavaFolderFile(File folderDir) {
@@ -45,14 +45,17 @@ public class JoanaView {
         }
         this.currentJavaFolderFile = folderDir;
         controller.letUserChooseMainClass(Helper.getAllClassesContainingMainMethod(this.currentJavaFolderFile));
+        tryCreateJoana();
     }
 
     public void setCurrentMainClass(String currentMainClass) {
         this.currentMainClass = currentMainClass;
+        tryCreateJoana();
     }
 
     private void tryCreateJoana() {
         if (currentMainClass == null || currentJavaFolderFile == null || currentJarFile == null) {
+            
             return;
         }
         joanaInstance = new JoanaInstance(
