@@ -6,18 +6,22 @@
 package joanakeygui;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import joanakeygui.joanahandler.JoanaInstance;
 
 /**
  *
@@ -26,31 +30,40 @@ import javafx.stage.Stage;
 public class FXMLDocumentController implements Initializable {
 
     private JoanaView joanaView = new JoanaView(this);
+    private SourceSinkAdderDialogHandler sourceSinkAdderDialogHandler;
     private Stage stage;
+
+    private ListView<String> sourcesList;
+    private ListView<String> sinkList;
+    private JoanaInstance joanaInstance;
 
     @FXML
     private ComboBox<String> mainClassesCB;
     @FXML
     private AnchorPane srcSinkAP;
+    @FXML
+    private TextField javaPathText;
+    @FXML
+    private TextField jarPathText;
 
     @FXML
     public void onAddSrc() {
-        System.out.println("add");
+        sourceSinkAdderDialogHandler.letUserAddSrc(stage);
     }
 
     @FXML
     public void onRemoveSrc() {
-
+        sourceSinkAdderDialogHandler.removeSelectedSrc();
     }
 
     @FXML
     public void onAddSink() {
-
+        sourceSinkAdderDialogHandler.letUserAddSink(stage);
     }
 
     @FXML
     public void onRemoveSink() {
-
+        sourceSinkAdderDialogHandler.removeSelectedSink();
     }
 
     @FXML
@@ -79,7 +92,17 @@ public class FXMLDocumentController implements Initializable {
         mainClassesCB.setOnAction((event) -> {
             joanaView.setCurrentMainClass(mainClassesCB.getSelectionModel().getSelectedItem());
         });
+        try {
+            sourceSinkAdderDialogHandler = new SourceSinkAdderDialogHandler(sourcesList, sinkList);
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
+        boolean debug = true;
+        if (debug) {
+            joanaView.setCurrentJarFile(new File("testdata/multipleClassesFalsePos/MultipleClassesFalsePos/dist/MultipleClassesFalsePos.jar"));
+            joanaView.setCurrentJavaFolderFile(new File("testdata/multipleClassesFalsePos/MultipleClassesFalsePos/src"));
+        }
     }
 
     public void setStage(Stage stage) {
@@ -92,8 +115,18 @@ public class FXMLDocumentController implements Initializable {
         mainClassesCB.setDisable(false);
     }
 
-    void letUserAddSinksAndSrcs() {
+    void letUserAddSinksAndSrcs(JoanaInstance joanaInstance) {
+        this.joanaInstance = joanaInstance;
+        sourceSinkAdderDialogHandler.setJoanaInstance(joanaInstance);
         srcSinkAP.setDisable(false);
+    }
+
+    void setJarPAth(String absolutePath) {
+        jarPathText.setText(absolutePath);
+    }
+
+    void setFolderPath(String absolutePath) {
+        javaPathText.setText(absolutePath);
     }
 
 }
