@@ -5,7 +5,10 @@
  */
 package joanakeygui;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -33,8 +36,6 @@ public class FXMLDocumentController implements Initializable {
     private SourceSinkAdderDialogHandler sourceSinkAdderDialogHandler;
     private Stage stage;
 
-    private ListView<String> sourcesList;
-    private ListView<String> sinkList;
     private JoanaInstance joanaInstance;
 
     @FXML
@@ -45,10 +46,15 @@ public class FXMLDocumentController implements Initializable {
     private TextField javaPathText;
     @FXML
     private TextField jarPathText;
+    @FXML
+    private ListView<String> sourcesList;
+    @FXML
+    private ListView<String> sinkList;
 
     @FXML
     public void onAddSrc() {
-        sourceSinkAdderDialogHandler.letUserAddSrc(stage);
+        SinkOrSource src = sourceSinkAdderDialogHandler.letUserAddSrc(stage);
+        sourcesList.getItems().add(src.toString());
     }
 
     @FXML
@@ -58,12 +64,42 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     public void onAddSink() {
-        sourceSinkAdderDialogHandler.letUserAddSink(stage);
+        SinkOrSource sink = sourceSinkAdderDialogHandler.letUserAddSink(stage);
+        sinkList.getItems().add(sink.toString());
     }
 
     @FXML
     public void onRemoveSink() {
         sourceSinkAdderDialogHandler.removeSelectedSink();
+    }
+
+    @FXML
+    public void createJoak() throws FileNotFoundException, IOException {
+        String sinkSrcJson = sourceSinkAdderDialogHandler.createSinkSourceJson();
+        String template = "pathKeY : \"dep/KeY.jar\",\n"
+                + "javaClass : \"\",\n"
+                + "pathToJar : \"JARPATH\",\n"
+                + "pathToJavaFile : \"JAVAPATH\",\n"
+                + "entryMethod : \"ENTRYMETHOD\",\n"
+                + "annotationPath : \"\",\n"
+                + "fullyAutomatic : true,\n";
+        template = template.replace("JARPATH", joanaView.getCurrentJarFile().getAbsolutePath());
+        template = template.replace("JAVAPATH", joanaView.getCurrentJavaFolderFile().getAbsolutePath());
+        template = template.replace("ENTRYMETHOD", joanaView.getCurrentMainClass());
+        
+        sinkSrcJson = template + sinkSrcJson;
+        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select save location");
+
+        File chosenFile = fileChooser.showSaveDialog(stage);
+        String filepath = chosenFile.getAbsolutePath();
+        if (!chosenFile.getAbsolutePath().endsWith(".joak")) {
+            filepath += ".joak";
+        }
+        BufferedWriter out = new BufferedWriter(new FileWriter(filepath));
+        out.write(sinkSrcJson);
+        out.close();
     }
 
     @FXML

@@ -5,10 +5,8 @@
  */
 package joanakeygui;
 
-import edu.kit.joana.api.sdg.SDGProgramPart;
 import java.net.URL;
-import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,10 +26,15 @@ public class AddSourceDialogController implements Initializable {
     @FXML
     private ComboBox<String> selectionCB;
 
+    @FXML
+    public void onOk() {
+        stage.close();
+    }
+
     private Stage stage;
     private JoanaInstance joanaInstance;
 
-    private String[] addingMethods = {"programPart", "method"};
+    private String[] addingMethods = {"programPart", "callsToMethod"};
 
     public void setJoanaInstance(JoanaInstance joanaInstance) {
         this.joanaInstance = joanaInstance;
@@ -52,18 +55,34 @@ public class AddSourceDialogController implements Initializable {
             String selected = selectMethodCB.getSelectionModel().getSelectedItem();
             if (selected.equals("programPart")) {
                 selectionCB.getItems().addAll(joanaInstance.getAllProgramPartsString());
-            } else {
+            } else if (selected.equals("callsToMethod")) {
                 selectionCB.getItems().addAll(joanaInstance.getAllMethodsString());
             }
         });
     }
 
-    public void showForSink() {
+    public Optional<SinkOrSource> showForSink() {
         stage.showAndWait();
+        String selectMethodStr = selectMethodCB.getSelectionModel().getSelectedItem();
+        String selectionStr = selectionCB.getSelectionModel().getSelectedItem();
+        if (selectMethodStr.equals("programPart")) {
+            return Optional.of(SinkOrSource.createProgramPart(selectionStr, "low"));
+        } else if (selectMethodStr.equals("callsToMethod")) {
+            return Optional.of(SinkOrSource.createMethod(selectionStr, "low"));
+        }
+        return Optional.empty();
     }
 
-    public void showForSrc() {
+    public Optional<SinkOrSource> showForSrc() {
         stage.showAndWait();
+        String selectMethodStr = selectMethodCB.getSelectionModel().getSelectedItem();
+        String selectionStr = selectionCB.getSelectionModel().getSelectedItem();
+        if (selectMethodStr.equals("programPart")) {
+            return Optional.of(SinkOrSource.createProgramPart(selectionStr, "high"));
+        } else if (selectMethodStr.equals("callsToMethod")) {
+            return Optional.of(SinkOrSource.createMethod(selectionStr, "high"));
+        }
+        return Optional.empty();
     }
 
 }

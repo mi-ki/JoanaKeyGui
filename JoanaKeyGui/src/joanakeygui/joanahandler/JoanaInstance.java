@@ -12,6 +12,7 @@ import com.ibm.wala.util.NullProgressMonitor;
 import com.ibm.wala.util.graph.GraphIntegrity;
 import edu.kit.joana.api.IFCAnalysis;
 import edu.kit.joana.api.sdg.SDGConfig;
+import edu.kit.joana.api.sdg.SDGFormalParameter;
 import edu.kit.joana.api.sdg.SDGMethod;
 import edu.kit.joana.api.sdg.SDGProgram;
 import edu.kit.joana.api.sdg.SDGProgramPart;
@@ -20,9 +21,7 @@ import edu.kit.joana.ifc.sdg.util.JavaMethodSignature;
 import edu.kit.joana.util.Stubs;
 import edu.kit.joana.wala.core.SDGBuilder;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -80,12 +79,14 @@ public class JoanaInstance {
                 new NullProgressMonitor());
         ana = new IFCAnalysis(program);
         allProgramParts = program.getAllProgramParts();
-        allMethods = program.getAllMethods();
         for (SDGProgramPart part : allProgramParts) {
             allProgramPartsString.add(part.toString());
         }
+        allMethods = program.getAllMethods();
         for (SDGMethod method : allMethods) {
-            allMethodsString.add(method.toString());
+            for (SDGFormalParameter param : method.getParameters()) {
+                allMethodsString.add(method.toString() + param.getName());
+            }
         }
     }
 

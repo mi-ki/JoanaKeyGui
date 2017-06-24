@@ -86,4 +86,18 @@ public class JoanaView {
         return joanaInstance;
     }
 
+    public File getCurrentJarFile() {
+        return currentJarFile;
+    }
+
+    public File getCurrentJavaFolderFile() {
+        return currentJavaFolderFile;
+    }
+
+    public String getCurrentMainClass() {
+        return currentMainClass;
+    }
+    
+    
+
 }
